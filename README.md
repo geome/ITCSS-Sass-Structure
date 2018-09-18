@@ -120,6 +120,11 @@ $button-primary__bg-color: $primary-button-bg-color;
 
 The order of the component imports no longer matters, and if we remove `button-primary.scss` then `modal.scss` will no longer break.
 
+When building components within a library:
+- `!default` should be appended to any variables which the consuming application may want to change. 
+
+- The component should `@import` the `settings.scss` file if it uses any of the variables from settings, this is mostly for storybooks which lack the ability to link variables between files, but also aids in keeping components atomic. 
+
 
 ## 2. Tools
 Self explanatory; keep any mixins/functions in here. High up in the list as these tools will be used throughout the rest of the Sass codebase.
@@ -329,6 +334,8 @@ Example rules:
 }
 ```
 Since this file is at the very bottom of the list, adding the '.bg-alpha' class to an element will trump any previously set background-color. While we should strive to keep specificity as low as possible, i.e. single class selectors via BEM, we will always have cases where nested classes are needed. To allow utilities to work on these, we need to add !important to the utilities' rules.
+
+When building component libraries, utilities should be used sparingly, as the expectation is that the component's SCSS file should contain the entirity of styling options. Additionally, conflicts may occur if utility classes are in both library SCSS code & application code.
 
 #### Avoiding @extend
 [This article by Oliver Jash](http://oliverjash.me/2012/09/07/methods-for-modifying-objects-in-oocss.html) explains clearly the cons of using @extend instead of defering this functionality to the HTML. I'll highlight a few reasons not to use @extend.
